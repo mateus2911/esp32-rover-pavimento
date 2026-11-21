@@ -1,58 +1,34 @@
 # Rover de Inspeção de Pavimento — ESP32-WROVER + OV2640 + IA
 
-Projeto final de robótica para controle remoto de um carrinho com **ESP32-WROVER-DEV** e câmera **OV2640**, realizando streaming de vídeo em tempo real para um backend **FastAPI + OpenCV + ONNX/YOLO** que detecta falhas no pavimento (rachaduras, buracos, desníveis).
+Repositório base e ambiente configurado para o projeto final de robótica: controle remoto de um carrinho com **ESP32-WROVER-DEV** e câmera **OV2640**, transmitindo vídeo em tempo real para um servidor Python que identifica falhas no pavimento.
 
-## Estrutura do Repositório
+## Estrutura de Pastas (Pronta para Implementação)
 
 ```text
 esp32-rover-pavimento/
-├── firmware/    # Código da ESP32-WROVER-DEV (PlatformIO: Wi-Fi + MJPEG + WebSocket + Failsafe)
-├── backend/     # Servidor Python FastAPI (captura de stream, inferência de IA e ponte de controle)
-├── frontend/    # Interface Web (vídeo anotado, controles WASD/botões, telemetria e captura)
-├── ai/          # Dataset coletado pelo carrinho, modelos .onnx e instruções de treino
-├── docs/        # Plano de implementação detalhado
-└── tests/       # Testes automatizados do backend
+├── firmware/    # Código C++/Arduino da ESP32-WROVER-DEV (a implementar)
+├── backend/     # Servidor Python FastAPI + OpenCV + ONNX + WebSocket (a implementar)
+├── frontend/    # Interface Web de controle e visualização (a implementar)
+├── ai/          # Dataset coletado, notebooks/scripts de treino e pesos .onnx
+├── docs/        # Plano de implementação, arquitetura e divisão por etapas
+└── tests/       # Testes automatizados com pytest (a implementar)
 ```
 
-## Início Rápido (Ambiente Python)
+## Ambiente Python Configurado
 
-O ambiente virtual fica em `.venv` (gerenciado com `uv`).
+O ambiente virtual já está criado em `.venv` (Python 3.12 via `uv`) com as dependências principais instaladas em [pyproject.toml](pyproject.toml):
+- `fastapi` e `uvicorn[standard]` (servidor Web e WebSockets)
+- `opencv-python-headless` e `numpy` (leitura/anotação de vídeo)
+- `onnxruntime` (inferência leve de modelos YOLO exportados em `.onnx`)
+- `websockets` e `pydantic-settings` (comunicação com a ESP32 e config via `.env`)
+- `pytest` e `httpx` (testes)
 
-### 1. Rodar em Modo Simulação (sem ESP32 conectada)
-Ideal para desenvolver e testar a interface, os comandos de controle e o pipeline de visão no computador:
+Para ativar o ambiente no terminal:
 
 ```bash
 source .venv/bin/activate
-uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Depois abra no navegador: **http://localhost:8000**
+## Plano e Etapas do Grupo
 
-- Use **W / A / S / D** (ou as setas / botões na tela) para pilotar o rover.
-- Pressione **Espaço** para parada de emergência.
-- Clique em **Capturar Frame** para salvar imagens em `ai/dataset/raw/`.
-
-### 2. Conectar com a ESP32 real
-
-1. Copie `.env.example` para `.env` e ajuste `ROVER_MOCK_MODE=false` e o IP da ESP32.
-2. Suba o backend novamente:
-   ```bash
-   source .venv/bin/activate
-   uvicorn backend.main:app --host 0.0.0.0 --port 8000
-   ```
-
-### 3. Rodar os testes
-
-```bash
-source .venv/bin/activate
-pytest
-```
-
-## Firmware (ESP32-WROVER-DEV)
-
-O esqueleto inicial está em [firmware/platformio.ini](firmware/platformio.ini) e [firmware/src/main.cpp](firmware/src/main.cpp).
-Antes de gravar na placa, confira o mapeamento da sua câmera `DCX OV2640 v2` e da sua Ponte H em [firmware/src/camera_pins.h](firmware/src/camera_pins.h).
-
-## Plano de Implementação
-
-Veja o roteiro completo por fases em [docs/PLANO_IMPLEMENTACAO.md](docs/PLANO_IMPLEMENTACAO.md).
+Consulte o guia completo com a arquitetura explicada e a divisão de tarefas em [docs/PLANO_IMPLEMENTACAO.md](docs/PLANO_IMPLEMENTACAO.md).
