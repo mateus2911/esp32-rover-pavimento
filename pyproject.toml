@@ -1,0 +1,29 @@
+[project]
+name = "esp32-rover-pavimento"
+version = "0.1.0"
+description = "Interface de controle, streaming e detecção de falhas no pavimento para carrinho RC com ESP32-WROVER-DEV e OV2640."
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "opencv-python-headless>=4.10.0",
+    "numpy>=1.26.0,<2.3.0",
+    "onnxruntime>=1.19.0",
+    "websockets>=13.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "httpx>=0.27.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.setuptools.packages.find]
+include = ["backend*"]

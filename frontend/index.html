@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rover Pavimento — Controle & IA</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>Rover de Inspeção de Pavimento</h1>
+      <span id="badge-mode" class="badge">Carregando...</span>
+      <span id="badge-detector" class="badge badge-neutral">IA: --</span>
+    </div>
+    <div class="metrics">
+      <span id="status-stream" class="pill">Stream: --</span>
+      <span id="status-esp" class="pill">ESP32: --</span>
+      <span id="status-fps" class="pill">FPS: 0.0</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel video-panel">
+      <div class="panel-header">
+        <h2>Câmera OV2640 + Detecção</h2>
+        <div class="actions">
+          <button id="btn-toggle-ai" class="btn btn-secondary">IA: Ligada</button>
+          <button id="btn-snapshot" class="btn btn-primary">Capturar Frame</button>
+        </div>
+      </div>
+      <div class="video-wrapper">
+        <img id="video-feed" src="/video_feed" alt="Stream do Rover" />
+      </div>
+      <p id="snapshot-feedback" class="hint">
+        Atalhos: <strong>W/A/S/D</strong> ou setas para dirigir • <strong>Espaço</strong> para parada de emergência.
+      </p>
+    </section>
+
+    <aside class="sidebar">
+      <section class="panel">
+        <h2>Controle do Carrinho</h2>
+        <div class="speed-box">
+          <label for="speed-slider">Potência PWM: <strong id="speed-value">70%</strong></label>
+          <input id="speed-slider" type="range" min="25" max="100" value="70" />
+        </div>
+
+        <div class="dpad" aria-label="Controle direcional">
+          <div></div>
+          <button class="pad-btn" data-dir="forward">▲<small>W</small></button>
+          <div></div>
+          <button class="pad-btn" data-dir="left">◀<small>A</small></button>
+          <button id="btn-stop" class="pad-btn pad-stop">■<small>STOP</small></button>
+          <button class="pad-btn" data-dir="right">▶<small>D</small></button>
+          <div></div>
+          <button class="pad-btn" data-dir="backward">▼<small>S</small></button>
+          <div></div>
+        </div>
+
+        <div class="telemetry-row">
+          <span>Motor Esq: <strong id="pwm-left">0</strong></span>
+          <span>Motor Dir: <strong id="pwm-right">0</strong></span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Falhas Detectadas (Tempo Real)</h2>
+        <ul id="detections-list" class="detections-list">
+          <li class="empty">Nenhuma falha detectada no frame atual.</li>
+        </ul>
+      </section>
+    </aside>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

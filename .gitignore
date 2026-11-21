@@ -1,0 +1,30 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+# Environment
+.env
+
+# PlatformIO / Firmware
+firmware/.pio/
+firmware/.vscode/
+
+# AI datasets, captures & large model weights
+ai/dataset/raw/*.jpg
+ai/dataset/raw/*.png
+ai/dataset/labeled/
+ai/models/*.pt
+ai/models/*.onnx
+*.mp4
+*.avi
+
+# OS / Editor
+.DS_Store
+Thumbs.db
