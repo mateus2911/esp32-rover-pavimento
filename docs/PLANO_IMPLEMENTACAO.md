@@ -77,10 +77,14 @@ Se o grupo seguir estes **3 combinados** desde o começo, o código de cada pess
 - [ ] **B4.** Implementar servidor WebSocket na porta `82`, controle PWM dos motores (`ledcWrite`) e *failsafe* de 500 ms.
 
 ### Frente C — Backend Python e Interface Web (`backend/` e `frontend/`)
-- [ ] **C1.** Criar servidor **FastAPI** inicial com um **modo simulação** (gerando frames falsos com OpenCV) para testar a interface mesmo sem a ESP32 pronta.
-- [ ] **C2.** Implementar captura contínua do stream MJPEG da ESP32 em thread separada (mantendo apenas o último frame).
+- [x] **C1.** Criar servidor **FastAPI** inicial com um **modo simulação** (gerando frames falsos com OpenCV) para testar a interface mesmo sem a ESP32 pronta *(configuração via `.env` com `pydantic-settings` implementada)*.
+- [x] **C2.** Implementar captura contínua do stream MJPEG da ESP32 em thread separada (mantendo apenas o último frame, com `CAP_PROP_BUFFERSIZE=1` e reconexão automática).
 - [ ] **C3.** Criar rota de streaming anotado (`/video_feed`), WebSocket de controle (`/ws/control`), botão de parada de emergência e endpoint para salvar fotos brutas em `ai/dataset/raw/`.
+  - [x] Rota `/video_feed` (com encerramento limpo ao desconectar), `/ws/control` + ponte WebSocket persistente para a ESP32 (`RoverBridge`), parada de emergência e captura de dataset (`POST /api/capture`, `GET /api/captures` a 3 img/s).
+  - [ ] Anotação de bounding boxes/classes no `/video_feed` *(depende da integração do modelo `.onnx` em D4)*.
 - [ ] **C4.** Construir a interface Web (`index.html`, `styles.css`, `app.js`) com vídeo ao vivo, controles por teclado (`W/A/S/D`), botões na tela, slider de velocidade e lista de falhas detectadas.
+  - [x] Vídeo ao vivo, controles `W/A/S/D`, botões na tela, slider de velocidade, parada de emergência (`Espaço`) e chave de captura contínua de dataset (3 img/s, atalho `C`).
+  - [ ] Lista de falhas detectadas *(depende da integração do modelo `.onnx` em D4)*.
 
 ### Frente D — Inteligência Artificial e Dataset (`ai/`)
 - [ ] **D1.** Estruturar notebook de treino (ex.: Google Colab com GPU gratuita) usando **YOLOv8n** ou **YOLO11n** e testar exportação para `.onnx` (`imgsz=320`).

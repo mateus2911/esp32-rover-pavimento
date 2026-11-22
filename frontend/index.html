@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rover Pavimento — Painel de Controle</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h2>Rover de Inspeção de Pavimento</h2>
+    <span id="ws-status" class="badge disconnected">WS Desconectado</span>
+  </header>
+
+  <main class="dashboard">
+    <section class="video-panel">
+      <img src="/video_feed" alt="Stream de Vídeo" />
+      <div class="telemetry">
+        <span>Motores: <strong id="motor-readout">L: 0 | R: 0</strong></span>
+      </div>
+    </section>
+
+    <section class="control-panel">
+      <label for="speed-slider">
+        Velocidade Máxima (PWM): <strong id="speed-value">180</strong>
+      </label>
+      <input type="range" id="speed-slider" min="60" max="255" value="180" />
+
+      <div class="dpad">
+        <button data-key="w" class="btn-dir up">W ▲</button>
+        <button data-key="a" class="btn-dir left">A ◀</button>
+        <button data-key="s" class="btn-dir down">S ▼</button>
+        <button data-key="d" class="btn-dir right">D ▶</button>
+      </div>
+
+      <button id="btn-estop" class="btn-estop">PARADA DE EMERGÊNCIA (ESPAÇO)</button>
+
+      <div class="dataset-panel">
+        <div class="dataset-header">
+          <span>Dataset (<code title="Pasta de destino">ai/dataset/raw</code>)</span>
+          <strong id="capture-count">0 fotos</strong>
+        </div>
+
+        <label class="capture-switch-row" for="toggle-capture">
+          <span class="switch-label-text">
+            Captura Contínua (3 img/s)
+            <small id="capture-mode-badge" class="capture-badge off">DESLIGADA</small>
+          </span>
+          <span class="switch">
+            <input type="checkbox" id="toggle-capture" />
+            <span class="slider"></span>
+          </span>
+        </label>
+
+        <p id="capture-status" class="capture-status">Ative a chave (ou pressione C) para capturar 3 imagens/s.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
