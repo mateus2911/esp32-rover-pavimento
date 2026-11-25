@@ -89,7 +89,7 @@ static void onWebSocketEvent(uint8_t num, WStype_t type, uint8_t *payload, size_
 }
 
 static void setupWifi() {
-#if WIFI_MODE_AP
+#if ROVER_WIFI_USE_AP
   WiFi.mode(WIFI_AP);
   IPAddress apIp(192, 168, 4, 1);
   IPAddress subnet(255, 255, 255, 0);
@@ -149,7 +149,7 @@ void setup() {
 
   Serial.printf("[OK] WebSocket de motores ativo na porta %d\n", CONTROL_WS_PORT);
   Serial.printf("[INFO] Stream MJPEG: http://%s:%d/stream\n",
-                WIFI_MODE_AP ? WiFi.softAPIP().toString().c_str() : WiFi.localIP().toString().c_str(),
+                ROVER_WIFI_USE_AP ? WiFi.softAPIP().toString().c_str() : WiFi.localIP().toString().c_str(),
                 STREAM_HTTP_PORT);
 }
 

@@ -6,14 +6,14 @@
 // =============================================================================
 // true  = ESP32 cria rede Wi-Fi própria (SoftAP) no IP 192.168.4.1 (padrão do projeto)
 // false = ESP32 conecta em uma rede Wi-Fi / hotspot existente (STA)
-#define WIFI_MODE_AP true
+#define ROVER_WIFI_USE_AP true
 
 #define WIFI_AP_SSID "RoverPavimento"
 #define WIFI_AP_PASS "12345678" // Mínimo 8 caracteres para WPA2
 #define WIFI_AP_CHANNEL 1
 #define WIFI_AP_MAX_CLIENTS 4
 
-// Usado apenas se WIFI_MODE_AP == false
+// Usado apenas se ROVER_WIFI_USE_AP == false
 #define WIFI_STA_SSID "NOME_DA_SUA_REDE"
 #define WIFI_STA_PASS "SENHA_DA_SUA_REDE"
 
