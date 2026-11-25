@@ -12,9 +12,18 @@ header {
   max-width: 960px;
   margin: 0 auto 1.5rem;
 }
+.status-group {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
 .badge { padding: 0.35rem 0.75rem; border-radius: 999px; font-size: 0.85rem; font-weight: 600; }
 .connected { background: #1b4332; color: #74c69d; }
 .disconnected { background: #590d22; color: #ff8fa3; }
+.mode-sim { background: #3b2f0b; color: #ffd166; }
+.mode-real-ok { background: #0f3d3e; color: #56cfe1; }
+.mode-real-wait { background: #3f2305; color: #ffa94d; }
 .dashboard {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -59,6 +68,17 @@ header {
   cursor: pointer;
 }
 .btn-estop:hover { background: #a61e1e; }
+.btn-snap {
+  padding: 0.7rem 0.9rem;
+  background: #0d6efd;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-snap:hover { background: #0b5ed7; }
+.btn-snap:active { background: #0a58ca; }
 .dataset-panel {
   border-top: 1px solid #2b3035;
   padding-top: 1rem;

@@ -22,6 +22,10 @@ class RoverBridge:
         self._ws_lock: asyncio.Lock | None = None
         self._connection_error_logged = False
 
+    @property
+    def is_connected(self) -> bool:
+        return not self.simulation_mode and self._is_ws_open(self._ws)
+
     def _get_lock(self) -> asyncio.Lock:
         if self._ws_lock is None:
             self._ws_lock = asyncio.Lock()

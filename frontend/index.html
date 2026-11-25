@@ -8,7 +8,10 @@
 <body>
   <header>
     <h2>Rover de Inspeção de Pavimento</h2>
-    <span id="ws-status" class="badge disconnected">WS Desconectado</span>
+    <div class="status-group">
+      <span id="mode-badge" class="badge mode-sim">Verificando...</span>
+      <span id="ws-status" class="badge disconnected">WS Desconectado</span>
+    </div>
   </header>
 
   <main class="dashboard">
@@ -40,6 +43,8 @@
           <strong id="capture-count">0 fotos</strong>
         </div>
 
+        <button id="btn-snap" type="button" class="btn-snap">Tirar Foto Agora (F)</button>
+
         <label class="capture-switch-row" for="toggle-capture">
           <span class="switch-label-text">
             Captura Contínua (3 img/s)
@@ -51,7 +56,7 @@
           </span>
         </label>
 
-        <p id="capture-status" class="capture-status">Ative a chave (ou pressione C) para capturar 3 imagens/s.</p>
+        <p id="capture-status" class="capture-status">Pressione F para foto avulsa ou C para capturar 3 imagens/s.</p>
       </div>
     </section>
   </main>

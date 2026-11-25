@@ -76,6 +76,19 @@ async def video_feed(request: Request):
     )
 
 
+@app.get("/api/status")
+async def get_status():
+    return {
+        "mock_mode": settings.mock_mode,
+        "stream_url": settings.esp32_stream_url,
+        "ws_url": settings.esp32_ws_url,
+        "stream_running": stream_manager.is_running,
+        "stream_connected": stream_manager.is_connected,
+        "esp32_ws_connected": rover_bridge.is_connected,
+        "total_captures": _count_captured_images(CAPTURE_DIR),
+    }
+
+
 @app.get("/api/captures")
 async def list_captures():
     return {

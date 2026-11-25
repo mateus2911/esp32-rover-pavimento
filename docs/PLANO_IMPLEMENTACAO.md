@@ -71,10 +71,10 @@ Se o grupo seguir estes **3 combinados** desde o começo, o código de cada pess
 - [ ] **A4.** Construir suporte fixo para a câmera inclinada para o chão (~30° a 45°) à frente do carrinho.
 
 ### Frente B — Firmware da ESP32 (`firmware/`)
-- [ ] **B1.** Configurar o projeto na IDE escolhida (PlatformIO no VS Code ou Arduino IDE) com suporte a PSRAM (`BOARD_HAS_PSRAM`).
-- [ ] **B2.** Implementar inicialização da câmera OV2640 + Wi-Fi (SoftAP criando rede própria ou STA em hotspot) + servidor de stream MJPEG na porta `81`.
+- [x] **B1.** Configurar o projeto na IDE escolhida (PlatformIO no VS Code ou Arduino IDE) com suporte a PSRAM (`BOARD_HAS_PSRAM`).
+- [x] **B2.** Implementar inicialização da câmera OV2640 + Wi-Fi (SoftAP criando rede própria ou STA em hotspot) + servidor de stream MJPEG na porta `81`.
 - [ ] **B3.** Testar o stream de vídeo isolado no navegador antes de ligar os motores.
-- [ ] **B4.** Implementar servidor WebSocket na porta `82`, controle PWM dos motores (`ledcWrite`) e *failsafe* de 500 ms.
+- [x] **B4.** Implementar servidor WebSocket na porta `82`, controle PWM dos motores (`ledcWrite`) e *failsafe* de 500 ms.
 
 ### Frente C — Backend Python e Interface Web (`backend/` e `frontend/`)
 - [x] **C1.** Criar servidor **FastAPI** inicial com um **modo simulação** (gerando frames falsos com OpenCV) para testar a interface mesmo sem a ESP32 pronta *(configuração via `.env` com `pydantic-settings` implementada)*.

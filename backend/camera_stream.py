@@ -20,10 +20,15 @@ class VideoStreamManager:
         self._running = False
         self._stop_event = threading.Event()
         self._thread: threading.Thread | None = None
+        self._stream_connected = False
 
     @property
     def is_running(self) -> bool:
         return self._running
+
+    @property
+    def is_connected(self) -> bool:
+        return self._running and self._stream_connected
 
     def start(self) -> None:
         """Inicia a thread em background para captura ou simulação contínua."""
@@ -36,6 +41,7 @@ class VideoStreamManager:
 
     def stop(self) -> None:
         self._running = False
+        self._stream_connected = False
         self._stop_event.set()
         if self._thread:
             self._thread.join(timeout=1.0)
@@ -85,6 +91,7 @@ class VideoStreamManager:
                     frame_count += 1
                     with self._lock:
                         self._latest_frame = frame.copy()
+                    self._stream_connected = True
                     self._stop_event.wait(timeout=1 / 30)  # Simula ~30 FPS
                     continue
 
@@ -93,6 +100,7 @@ class VideoStreamManager:
                         cap.release()
                     cap = self._open_capture()
                     if cap is None:
+                        self._stream_connected = False
                         self._stop_event.wait(timeout=self.reconnect_delay)
                         continue
                     consecutive_failures = 0
@@ -104,12 +112,14 @@ class VideoStreamManager:
                         cap.release()
                         cap = None
                         consecutive_failures = 0
+                        self._stream_connected = False
                         self._stop_event.wait(timeout=self.reconnect_delay)
                     else:
                         self._stop_event.wait(timeout=0.05)
                     continue
 
                 consecutive_failures = 0
+                self._stream_connected = True
                 with self._lock:
                     self._latest_frame = frame.copy()
         finally:

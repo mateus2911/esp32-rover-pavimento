@@ -1,8 +1,10 @@
 const statusBadge = document.getElementById("ws-status");
+const modeBadge = document.getElementById("mode-badge");
 const motorReadout = document.getElementById("motor-readout");
 const speedSlider = document.getElementById("speed-slider");
 const speedValue = document.getElementById("speed-value");
 const estopBtn = document.getElementById("btn-estop");
+const snapBtn = document.getElementById("btn-snap");
 const captureToggle = document.getElementById("toggle-capture");
 const captureModeBadge = document.getElementById("capture-mode-badge");
 const captureCount = document.getElementById("capture-count");
@@ -69,17 +71,30 @@ function formatPhotoCount(total) {
 
 async function refreshCaptureCount() {
   try {
-    const response = await fetch("/api/captures");
+    const response = await fetch("/api/status");
     if (!response.ok) return;
     const data = await response.json();
     captureCount.textContent = formatPhotoCount(data.total_captures ?? 0);
+
+    if (data.mock_mode) {
+      modeBadge.textContent = "Modo Simulação";
+      modeBadge.className = "badge mode-sim";
+    } else if (data.stream_connected && data.esp32_ws_connected) {
+      modeBadge.textContent = "ESP32 Conectada";
+      modeBadge.className = "badge mode-real-ok";
+    } else {
+      const cam = data.stream_connected ? "Câm OK" : "Sem Câm";
+      const ws = data.esp32_ws_connected ? "Motores OK" : "Sem Motores";
+      modeBadge.textContent = `ESP32 Real (${cam} | ${ws})`;
+      modeBadge.className = "badge mode-real-wait";
+    }
   } catch {
-    // Silencioso no carregamento inicial caso o servidor reinicie
+    // Silencioso caso o servidor esteja reiniciando
   }
 }
 
-async function captureFrame() {
-  if (isCapturing || !captureToggle.checked) return;
+async function requestCapture(prefixLabel) {
+  if (isCapturing) return;
   isCapturing = true;
 
   try {
@@ -89,7 +104,7 @@ async function captureFrame() {
       throw new Error(data.detail || "Erro ao capturar frame.");
     }
     captureCount.textContent = formatPhotoCount(data.total_captures);
-    captureStatus.textContent = `Capturando (3/s): ${data.filename}`;
+    captureStatus.textContent = `${prefixLabel}: ${data.filename}`;
     captureStatus.className = "capture-status ok";
   } catch (err) {
     captureStatus.textContent = err.message || "Falha na captura.";
@@ -97,6 +112,15 @@ async function captureFrame() {
   } finally {
     isCapturing = false;
   }
+}
+
+async function captureFrame() {
+  if (!captureToggle.checked) return;
+  await requestCapture("Capturando (3/s)");
+}
+
+async function captureSinglePhoto() {
+  await requestCapture("Foto salva");
 }
 
 function updateCaptureLoop() {
@@ -126,6 +150,10 @@ window.addEventListener("keydown", (e) => {
     triggerEmergencyStop();
     return;
   }
+  if (key === "f" && !e.repeat) {
+    captureSinglePhoto();
+    return;
+  }
   if (key === "c" && !e.repeat) {
     captureToggle.checked = !captureToggle.checked;
     updateCaptureLoop();
@@ -150,12 +178,16 @@ document.querySelectorAll(".btn-dir").forEach((btn) => {
   btn.addEventListener("pointerdown", () => { keysPressed[key] = true; });
   btn.addEventListener("pointerup", () => { keysPressed[key] = false; });
   btn.addEventListener("pointerleave", () => { keysPressed[key] = false; });
+  btn.addEventListener("pointercancel", () => { keysPressed[key] = false; });
 });
 
+window.addEventListener("blur", triggerEmergencyStop);
 estopBtn.addEventListener("click", triggerEmergencyStop);
+snapBtn.addEventListener("click", captureSinglePhoto);
 captureToggle.addEventListener("change", updateCaptureLoop);
 
 refreshCaptureCount();
+setInterval(refreshCaptureCount, 2000);
 
 setInterval(() => {
   const maxSpeed = Number(speedSlider.value);

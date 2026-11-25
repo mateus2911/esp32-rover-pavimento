@@ -28,6 +28,14 @@ def test_capture_endpoints_save_raw_frame(tmp_path, monkeypatch):
         assert after.status_code == 200
         assert after.json()["total_captures"] == 1
 
+        status = client.get("/api/status")
+        assert status.status_code == 200
+        status_payload = status.json()
+        assert status_payload["mock_mode"] is True
+        assert status_payload["stream_running"] is True
+        assert status_payload["stream_connected"] is True
+        assert status_payload["total_captures"] == 1
+
 
 def test_capture_returns_503_when_no_frame(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "CAPTURE_DIR", tmp_path)
